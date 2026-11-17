@@ -1087,7 +1087,7 @@ function pagTurmas(){
   const ativas=estado.turmas.filter(t=>t.st==='ativa').length;
   const alunos=new Set(estado.turmas.flatMap(t=>t.alunos)).size;
   const vagas=estado.turmas.reduce((s,t)=>s+Math.max(t.cap-t.alunos.length,0),0);
-  return cabecalho('turmas','Turmas de Pilates') + `
+  return cabecalho('turmas','Turmas') + `
   <div class="planejado" style="background:#eef6ff;border-color:#c5dcf7;border-left-color:#4dabf7;color:#1d4e8b">🧘 <b>Turmas</b> é o módulo do Pilates: grade semanal, calendário e lista de presença. É aqui que a clínica cadastra turmas, matricula alunos e controla as vagas.</div>
   <div class="cards">
     <div class="card-kpi"><div class="v">${ativas}</div><div class="r">🧘 Turmas ativas</div></div>
