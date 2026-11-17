@@ -244,7 +244,6 @@
       <button class="nav-item" data-mod="pacotes"><span class="ico">🎟️</span>Pacotes de sessões</button>
       <button class="nav-item" data-mod="laser"><span class="ico">✨</span>Regiões a Laser</button>
       <button class="nav-item" data-mod="planos"><span class="ico">🎯</span>Tratamentos <span class="nav-tag">planejado</span></button>
-      <button class="nav-item" data-mod="turmas_pilates"><span class="ico">👥</span>Turmas de Pilates <span class="nav-tag">planejado</span></button>
       <div class="nav-titulo">Gestão</div>
       <button class="nav-item" data-mod="orcamentos"><span class="ico">💰</span>Orçamentos</button>
       <button class="nav-item" data-mod="financeiro"><span class="ico">🏦</span>Financeiro</button>
@@ -463,7 +462,7 @@ const titulos = {
   dashboard:'Dashboard',pacientes:'Pacientes',pacientes_ficha:'Ficha do Paciente',agenda:'Agenda',
   atendimentos:'Atendimentos',turmas:'Turmas',prontuario:'Prontuário clínico',avaliacao:'Avaliação',
   evolucao:'Evolução por sessão',pacotes:'Pacotes de sessões',planos:'Tratamentos (planejado)',
-  laser:'Regiões a Laser',turmas_pilates:'Turmas de Pilates (planejado)',
+  laser:'Regiões a Laser',
   orcamentos:'Orçamentos',financeiro:'Financeiro',pagamentos:'Financeiro — Pagamentos',
   contas_pagar:'Financeiro — Contas a pagar',fornecedores:'Financeiro — Fornecedores',
   fluxo_caixa:'Financeiro — Fluxo de caixa',duplicatas:'Financeiro — Nomes parecidos',
@@ -511,13 +510,12 @@ const treinoInfo = {
   clinica:`<ol><li>Altere nome fantasia, telefone e endereço.</li><li>Troque a <b>cor primária</b> e salve.</li><li>Esses dados alimentam telas, documentos e a API WhatsApp.</li></ol>`,
   social:`<ol><li>Crie um post — ele nasce <b>Pendente</b>.</li><li>Clique em <b>Aprovar</b> e depois em Publicar.</li><li>Teste <b>Rejeitar</b> e veja o fluxo de revisão.</li></ol>`,
   notificacoes:`<ol><li>Veja os avisos de pacote, financeiro e clínico.</li><li>Marque uma como <b>lida</b> e observe o contador.</li><li>Abra as <b>Preferências</b> e escolha o que receber.</li></ol>`,
-  turmas_pilates:`<ol><li>Leia o aviso de módulo <b>planejado</b>.</li><li>Compare a tabela "o que fará × use enquanto isso".</li><li>Clique em <b>Abrir Turmas disponíveis</b>.</li></ol>`,
 };
 const BASE_REAL='https://xn--ljaltomao-s2a7b.com.br';
 const LINKS_REAIS={
   dashboard:'/',pacientes:'/pacientes',agenda:'/agenda',atendimentos:'/atendimentos',turmas:'/turmas',
   prontuario:'/pacientes',avaliacao:'/pacientes',evolucao:'/pacientes',pacotes:'/pacientes',
-  planos:'/modulos/tratamentos',laser:'/laser/regioes',turmas_pilates:'/modulos/turmas_pilates',
+  planos:'/modulos/tratamentos',laser:'/laser/regioes',
   orcamentos:'/pacientes',financeiro:'/financeiro',pagamentos:'/financeiro/pagamentos',
   contas_pagar:'/financeiro/contas-pagar',fornecedores:'/financeiro/fornecedores',
   fluxo_caixa:'/financeiro/fluxo-caixa',duplicatas:'/financeiro/duplicatas',notas_fiscais:'/fiscal',
@@ -1090,7 +1088,7 @@ function pagTurmas(){
   const alunos=new Set(estado.turmas.flatMap(t=>t.alunos)).size;
   const vagas=estado.turmas.reduce((s,t)=>s+Math.max(t.cap-t.alunos.length,0),0);
   return cabecalho('turmas','Turmas de Pilates') + `
-  <div class="planejado" style="background:#eef6ff;border-color:#c5dcf7;border-left-color:#4dabf7;color:#1d4e8b">🧘 <b>Turmas</b> é o módulo disponível para o Pilates: grade semanal, calendário e lista de presença. O item “Turmas de Pilates” do menu é um módulo <b>planejado</b> e apenas repete esta função — use esta tela.</div>
+  <div class="planejado" style="background:#eef6ff;border-color:#c5dcf7;border-left-color:#4dabf7;color:#1d4e8b">🧘 <b>Turmas</b> é o módulo do Pilates: grade semanal, calendário e lista de presença. É aqui que a clínica cadastra turmas, matricula alunos e controla as vagas.</div>
   <div class="cards">
     <div class="card-kpi"><div class="v">${ativas}</div><div class="r">🧘 Turmas ativas</div></div>
     <div class="card-kpi"><div class="v">${alunos}</div><div class="r">👥 Alunos matriculados</div></div>
@@ -2039,25 +2037,6 @@ function preferenciasNotificacoes(){
 }
 function salvarPreferencias(){ fez('notificacao_pref'); fecharModal(); flash('Preferências de notificação salvas ✓'); }
 
-/* ===== MÓDULOS PLANEJADOS ===== */
-function pagTurmasPilates(){
-  return cabecalho('turmas_pilates','Turmas de Pilates (planejado)') + `
-  <div class="planejado">🟸 <b>Funcionalidade planejada — ainda não disponível para uso.</b> <b>Cadastro de turmas de Pilates, horários recorrentes, capacidade e controle de vagas.</b> O módulo é específico da vertical Pilates e ainda não tem tela adaptada; no sistema real, esta URL abre a tela padrão de módulo planejado. Enquanto isso, use o módulo <b>Turmas</b>, que já está disponível e cobre grade semanal, calendário e lista de presença.</div>
-  <div class="cards">
-    <div class="card-kpi"><div class="v">🟸</div><div class="r">Situação do módulo</div></div>
-    <div class="card-kpi"><div class="v">${estado.turmas.length}</div><div class="r">Turmas já atendidas em “Turmas”</div></div>
-    <div class="card-kpi"><div class="v">${estado.turmas.reduce((s,t)=>s+t.alunos.length,0)}</div><div class="r">Alunos matriculados</div></div>
-  </div>
-  <div class="tabela-wrap"><table>
-    <tr><th>O que o módulo planejado fará</th><th>Enquanto isso, use</th></tr>
-    <tr><td>Cadastro de turmas com horários recorrentes</td><td>Turmas → <b>+ Nova turma</b> (dias, horário, duração e capacidade)</td></tr>
-    <tr><td>Capacidade e controle de vagas</td><td>Turmas → coluna <b>Alunos / capacidade</b></td></tr>
-    <tr><td>Lista de presença por encontro</td><td>Turmas → botão <b>Chamada</b></td></tr>
-    <tr><td>Calendário mensal das turmas</td><td>Turmas → <b>Grade semanal</b></td></tr>
-  </table></div>
-  <div class="toolbar" style="margin-top:16px"><button class="btn teal" onclick="mostrar('turmas')">Abrir Turmas disponíveis →</button></div>`;
-}
-
 /* ===== FLASH ===== */
 const flashBox=document.createElement('div');
 flashBox.style.cssText='position:fixed;top:70px;right:22px;background:#0b7285;color:#fff;padding:12px 18px;border-radius:10px;box-shadow:0 8px 22px rgba(0,0,0,.25);z-index:99;font-size:.9rem;font-weight:600;max-width:360px;transition:.25s;opacity:0;pointer-events:none;';
@@ -2077,7 +2056,6 @@ const CHAVES_MOD = {
   pacotes:['pacote_criado','pacote_consumido'],
   planos:['plano_item','concluir_plano'],
   laser:['laser_regiao','laser_pacote','laser_aplicacao'],
-  turmas_pilates:['turmas_pilates_visto'],
   orcamentos:['orc_item','aprovar_orc'],
   financeiro:['receber'],
   pagamentos:['pagamento_manual'],
@@ -2116,7 +2094,6 @@ const DESAFIOS = {
   pacotes:[{k:'pacote_criado',t:'Crie um pacote de sessões'},{k:'pacote_consumido',t:'Consuma 1 sessão do pacote'}],
   planos:[{k:'plano_item',t:'Adicione um procedimento ao plano'},{k:'concluir_plano',t:'Conclua o plano de tratamento'}],
   laser:[{k:'laser_regiao',t:'Cadastre uma região corporal'},{k:'laser_pacote',t:'Crie um pacote-modelo para uma região'},{k:'laser_aplicacao',t:'Registre uma aplicação e veja o nº da sessão calculado'}],
-  turmas_pilates:[{k:'turmas_pilates_visto',t:'Leia a página do módulo planejado'}],
   orcamentos:[{k:'orc_item',t:'Adicione um item ao orçamento'},{k:'aprovar_orc',t:'Aprove o orçamento (botão verde)'}],
   financeiro:[{k:'receber',t:'Registre um recebimento (parcial ou total)'}],
   pagamentos:[{k:'pagamento_manual',t:'Lance um pagamento manual'}],
@@ -2532,7 +2509,6 @@ const EXP_MSG = {
   clinica:'<b>Clínica</b> guarda os dados institucionais: razão social, nome fantasia, CNPJ, telefones, WhatsApp, e-mail, endereço, logo e <b>cor primária</b>. Esses dados aparecem nas telas, nos documentos e na <b>API do WhatsApp</b>. Alterações exigem permissão administrativa e ficam na auditoria.',
   social:'<b>Social</b> organiza as publicações da clínica para Instagram e Facebook com fluxo de aprovação: <b>Pendente → Aprovado → Publicado</b>; um post rejeitado volta para revisão. Nada é publicado sem aprovação. As contas das redes são configuradas em um único lugar.',
   notificacoes:'A central de <b>Notificações</b> reúne avisos de <b>pacotes acabando</b>, <b>contas a vencer</b> e <b>evoluções pendentes</b>. O sino no topo mostra quantas não foram lidas; você pode marcar uma ou todas como lidas e ajustar as <b>preferências</b> do que deseja receber.',
-  turmas_pilates:'<b>Turmas de Pilates</b> é um módulo <b>planejado</b> para a vertical Pilates: ainda não tem tela adaptada. Enquanto isso, o módulo <b>Turmas</b> já cobre grade semanal, capacidade, matrícula e lista de presença — use-o no dia a dia.',
 };
 const ANOTACOES = {
   dashboard:[
@@ -2719,10 +2695,6 @@ const ANOTACOES = {
     ['.toolbar .btn.teal','Marca todas como lidas.'],
     ['table','Avisos de pacote, financeiro e clínico, com ação para marcar como lida.'],
   ],
-  turmas_pilates:[
-    ['.planejado','Módulo planejado: ainda não tem tela adaptada para a vertical Pilates.'],
-    ['table','O que o módulo fará × o que usar enquanto isso (módulo Turmas).'],
-  ],
 };
 const expNav = {
   dashboard:'Visão geral: sessões de hoje, indicadores e contas em aberto.',
@@ -2736,7 +2708,6 @@ const expNav = {
   pacotes:'Pacotes de sessões com consumo transacional e saldo nunca negativo.',
   planos:'Tratamentos: módulo planejado para esta vertical.',
   laser:'Regiões corporais, pacotes-modelo e histórico de sessões de laser.',
-  turmas_pilates:'Módulo planejado; use Turmas enquanto isso.',
   orcamentos:'Propostas financeiras apresentadas ao paciente.',
   financeiro:'Contas a receber e recebimentos.',
   pagamentos:'Livro de entradas: o que foi efetivamente recebido.',
@@ -2950,7 +2921,7 @@ const paginas={
   dashboard:pagDashboard,pacientes:pagPacientes,prontuario:pagFicha,pacientes_ficha:pagFicha,
   agenda:pagAgenda,atendimentos:pagAtendimentos,turmas:pagTurmas,avaliacao:pagAvaliacao,
   evolucao:pagEvolucao,pacotes:pagPacotes,planos:pagPlanos,laser:pagLaser,
-  turmas_pilates:pagTurmasPilates,orcamentos:pagOrcamentos,financeiro:pagFinanceiro,
+  orcamentos:pagOrcamentos,financeiro:pagFinanceiro,
   pagamentos:pagPagamentos,contas_pagar:pagContasPagar,fornecedores:pagFornecedores,
   fluxo_caixa:pagFluxoCaixa,duplicatas:pagDuplicatas,notas_fiscais:pagNotasFiscais,
   convenios:pagConvenios,profissionais:pagProfissionais,procedimentos:pagProcedimentos,
@@ -2967,7 +2938,6 @@ function mostrar(mod){
   $('#page').innerHTML = (paginas[mod]||pagDashboard).call();
   anotar(mod);
   if(mod==='admin' && !prog.feito.admin_visitado) fez('admin_visitado');
-  if(mod==='turmas_pilates' && !prog.feito.turmas_pilates_visto) fez('turmas_pilates_visto');
   atualizarProgresso();
   if(mod==='pacientes'){
     const input=$('#buscaPac'); if(input) input.oninput=()=>{ $('#corpoPac').innerHTML=pacientesRows(estado.pacientes,input.value); };
